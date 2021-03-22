@@ -1,0 +1,20 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pytest = "==4.5.0"
+twine = "*"
+mypy = "==0.770"
+responses = ">=0.10.0"
+black = "*"
+
+[packages]
+requests = ">2.0.0,<3.0.0"
+
+[requires]
+python_version = "3.7"
+
+[pipenv]
+allow_prereleases = true

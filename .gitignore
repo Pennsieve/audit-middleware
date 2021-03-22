@@ -1,0 +1,10 @@
+*.class
+*.log
+.idea/
+tags
+target/
+python/.mypy_cache/
+python2.7/.mypy_cache/
+scala/target/
+scala/project/project/
+scala/project/target/

@@ -1,0 +1,22 @@
+version: '3.5'
+services:
+  audit_middleware_test:
+    image: pennsieve/audit_middleware-test:${IMAGE_TAG}
+    build:
+      context: .
+      dockerfile: test/Dockerfile
+    networks:
+      - audit_middleware
+    command: bash -c "pytest"
+  audit_middleware:
+    image: pennsieve/audit_middleware:${IMAGE_TAG}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - PENNSIEVE_NEXUS_USER
+      - PENNSIEVE_NEXUS_PW
+    command: ["twine", "upload", "dist/*", "--repository-url", "https://nexus.pennsieve.cc/repository/pypi-prod/", "-u", "${PENNSIEVE_NEXUS_USER}", "-p", "${PENNSIEVE_NEXUS_PW}"]
+networks:
+  audit_middleware:
+    name: audit_middleware

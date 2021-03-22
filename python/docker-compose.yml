@@ -1,0 +1,22 @@
+version: '3.5'
+services:
+  audit_middleware_test:
+    image: blackfynn/audit_middleware-test:${IMAGE_TAG}
+    build:
+      context: .
+      dockerfile: test/Dockerfile
+    networks:
+      - audit_middleware
+    command: bash -c "mypy --strict ./audit_middleware && pytest"
+  audit_middleware:
+    image: blackfynn/audit_middleware:${IMAGE_TAG}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - BLACKFYNN_NEXUS_USER
+      - BLACKFYNN_NEXUS_PW
+    command: ["twine", "upload", "dist/*", "--repository-url", "https://nexus.blackfynn.cc/repository/pypi-prod/", "-u", "${BLACKFYNN_NEXUS_USER}", "-p", "${BLACKFYNN_NEXUS_PW}"]
+networks:
+  audit_middleware:
+    name: audit_middleware
