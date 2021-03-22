@@ -1,6 +1,6 @@
 // Copyright (c) 2020 Pennsieve, Inc. All Rights Reserved.
 
-package com.blackfynn.audit.middleware
+package com.pennsieve.audit.middleware
 
 import collection.immutable.{ Seq => ISeq }
 import akka.actor.ActorSystem

@@ -1,5 +1,5 @@
-lazy val akkaHttpVersion = "10.1.3"
-lazy val akkaVersion = "2.5.22"
+lazy val akkaHttpVersion = "10.1.11"
+lazy val akkaVersion = "2.6.5"
 lazy val circeVersion = "0.11.1"
 
 val assemblyJarPath = taskKey[Unit]("Call assembly and get the JAR file path.")
@@ -8,7 +8,7 @@ lazy val root = (project in file("."))
   .enablePlugins(AutomateHeaderPlugin)
   .settings(
     inThisBuild(
-      List(organization := "com.blackfynn", scalaVersion := "2.12.10")
+      List(organization := "com.pennsieve", scalaVersion := "2.12.10")
     ),
     name := "audit-middleware",
     headerLicense := Some(

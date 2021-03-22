@@ -1,6 +1,6 @@
 // Copyright (c) 2020 Blackfynn, Inc. All Rights Reserved.
 
-package com.blackfynn.audit.middleware
+package com.pennsieve.audit.middleware
 
 import akka.http.scaladsl.model.{ HttpRequest, HttpResponse, _ }
 import akka.util.ByteString
