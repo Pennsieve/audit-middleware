@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Blackfynn, Inc. All Rights Reserved.
+// Copyright (c) 2020 Pennsieve, Inc. All Rights Reserved.
 
 package com.pennsieve.audit.middleware
 

@@ -1,11 +1,10 @@
-// Copyright (c) 2020 Blackfynn, Inc. All Rights Reserved.
+// Copyright (c) 2020 Pennsieve, Inc. All Rights Reserved.
 
 package com.pennsieve.audit.middleware
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.model.{ HttpMethods, HttpRequest, HttpResponse, Uri }
 import akka.http.scaladsl.unmarshalling.Unmarshal
-import akka.stream.ActorMaterializer
 import io.circe.Json
 import io.circe.parser._
 import io.circe.syntax._
@@ -30,9 +29,8 @@ class MockAuditLogger(
   gatewayHost: GatewayHost
 )(implicit
   override val system: ActorSystem,
-  override val executionContext: ExecutionContext,
-  override val materializer: ActorMaterializer
-) extends AuditLogger(gatewayHost)(system, executionContext, materializer)
+  override val executionContext: ExecutionContext
+) extends AuditLogger(gatewayHost)(system, executionContext)
     with MockHttpResponder
     with MockRequestBody {
 
@@ -86,7 +84,6 @@ class AuditLogSpec extends WordSpec with BeforeAndAfterEach with Matchers {
 
   implicit val system: ActorSystem = ActorSystem("test-audit-logger")
   implicit val executionContext: ExecutionContext = system.dispatcher
-  implicit val materializer: ActorMaterializer = ActorMaterializer()
 
   val gatewayHost: GatewayHost = GatewayHost(TestConstants.GATEWAY_HOST)
 

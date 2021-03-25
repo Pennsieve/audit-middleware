@@ -13,7 +13,6 @@ import akka.http.scaladsl.model.{
 import akka.http.scaladsl.model.HttpMethods.POST
 import akka.http.scaladsl.unmarshalling.Unmarshal
 import akka.http.scaladsl.Http
-import akka.stream.ActorMaterializer
 import io.circe.{ Encoder, Json }
 import io.circe.syntax._
 
@@ -21,7 +20,6 @@ import scala.concurrent.{ ExecutionContext, Future }
 
 trait HttpResponder {
   implicit val system: ActorSystem
-  implicit val materializer: ActorMaterializer
   implicit val executionContext: ExecutionContext
 
   def responder: HttpResponder.Responder
@@ -153,8 +151,7 @@ class AuditLogger(
   gateway: GatewayHost
 )(implicit
   val system: ActorSystem,
-  val executionContext: ExecutionContext,
-  val materializer: ActorMaterializer
+  val executionContext: ExecutionContext
 ) extends HttpResponder
     with Auditor {
 
