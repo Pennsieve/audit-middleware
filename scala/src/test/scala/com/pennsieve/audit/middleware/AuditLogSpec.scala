@@ -8,7 +8,10 @@ import akka.http.scaladsl.unmarshalling.Unmarshal
 import io.circe.Json
 import io.circe.parser._
 import io.circe.syntax._
-import org.scalatest.{ BeforeAndAfterEach, Matchers, WordSpec }
+import org.scalatest.{ BeforeAndAfterEach }
+import org.scalatest.wordspec.AnyWordSpec
+
+import org.scalatest.matchers.should.Matchers
 
 import scala.collection.mutable.{ Map => MutMap }
 import scala.concurrent.duration._
@@ -80,7 +83,7 @@ class MockAuditLogger(
   }
 }
 
-class AuditLogSpec extends WordSpec with BeforeAndAfterEach with Matchers {
+class AuditLogSpec extends AnyWordSpec with BeforeAndAfterEach with Matchers {
 
   implicit val system: ActorSystem = ActorSystem("test-audit-logger")
   implicit val executionContext: ExecutionContext = system.dispatcher
