@@ -27,23 +27,28 @@ Any branch:
 ```
 $ sbt publishLocal
 ```
+or 
+```
+$ sbt +publishLocal
+```
+to test cross compilation
 
 ### A snapshot
 
 Any branch (but usually should be `master`):
 
 ```
-$ sbt publish
+$ sbt +publish
 ```
-This will build the jar as a snapshot and push it to `maven-snapshots` on Nexus.
+This will build the jars as `_2.12` and `2.13` snapshots and push them to `maven-snapshots` on Nexus.
 
 ### A release
 
 From your `master` branch:
 
 ```
-$ sbt release
+$ sbt release cross
 ```
 
-Follow the prompts to update the version and build the jar as an official 
-release and push it to `maven-releases` on Nexus.
+Follow the prompts to update the version and build the jars as official `_2.12` and `_2.13` 
+releases and push them to `maven-releases` on Nexus.

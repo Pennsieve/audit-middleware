@@ -20,7 +20,7 @@ node("executor") {
       }
       dir("scala") {
         withCredentials([pennsieveNexusCreds]) {
-          sh "sbt clean compile"
+          sh "sbt clean +compile"
         }
       }
     }
@@ -35,7 +35,7 @@ node("executor") {
         }
         dir("scala") {
           try {
-            sh "sbt test"
+            sh "sbt +test"
           } finally {
             junit '**/target/test-reports/*.xml'
           }

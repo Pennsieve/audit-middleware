@@ -8,7 +8,11 @@ import akka.http.scaladsl.unmarshalling.Unmarshal
 import io.circe.Json
 import io.circe.parser._
 import io.circe.syntax._
-import org.scalatest.{ BeforeAndAfterEach, Matchers, WordSpec }
+import org.scalatest.{ BeforeAndAfterEach }
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest.EitherValues._
+
+import org.scalatest.matchers.should.Matchers
 
 import scala.collection.mutable.{ Map => MutMap }
 import scala.concurrent.duration._
@@ -80,7 +84,7 @@ class MockAuditLogger(
   }
 }
 
-class AuditLogSpec extends WordSpec with BeforeAndAfterEach with Matchers {
+class AuditLogSpec extends AnyWordSpec with BeforeAndAfterEach with Matchers {
 
   implicit val system: ActorSystem = ActorSystem("test-audit-logger")
   implicit val executionContext: ExecutionContext = system.dispatcher
@@ -101,7 +105,7 @@ class AuditLogSpec extends WordSpec with BeforeAndAfterEach with Matchers {
       val result = Await.result(f, 10.seconds)
       result should be(())
       val body = mockLogger.getRequestBody(testTraceId).get
-      val expected = parse("\"payload\"").right.get.noSpaces
+      val expected = parse("\"payload\"").toOption.get.noSpaces
       body should be(expected)
       mockLogger.getRequestBody(otherTraceId) should be(None)
     }
@@ -130,7 +134,7 @@ class AuditLogSpec extends WordSpec with BeforeAndAfterEach with Matchers {
           "list-items": ["a", "b", "c", "d", "e"],
           "records": ["123", "456", "789"]
         }
-        """).right.get.noSpaces
+        """).toOption.get.noSpaces
       body should be(expected)
     }
 
@@ -144,10 +148,7 @@ class AuditLogSpec extends WordSpec with BeforeAndAfterEach with Matchers {
         .append("key-2", "bar")
         .log(unauthorizedTraceId)
       val result = Try(Await.result(f, 10.seconds)).toEither
-      result.isLeft should be(true)
-      result.left.get.getMessage should be(
-        "\"Not authorized\""
-      ) // Fails - not authorized
+      result.left.value.getMessage should be("\"Not authorized\"")
     }
   }
 }
