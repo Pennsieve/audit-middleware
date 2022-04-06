@@ -10,6 +10,7 @@ import io.circe.parser._
 import io.circe.syntax._
 import org.scalatest.{ BeforeAndAfterEach }
 import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest.EitherValues._
 
 import org.scalatest.matchers.should.Matchers
 
@@ -104,7 +105,7 @@ class AuditLogSpec extends AnyWordSpec with BeforeAndAfterEach with Matchers {
       val result = Await.result(f, 10.seconds)
       result should be(())
       val body = mockLogger.getRequestBody(testTraceId).get
-      val expected = parse("\"payload\"").right.get.noSpaces
+      val expected = parse("\"payload\"").toOption.get.noSpaces
       body should be(expected)
       mockLogger.getRequestBody(otherTraceId) should be(None)
     }
@@ -133,7 +134,7 @@ class AuditLogSpec extends AnyWordSpec with BeforeAndAfterEach with Matchers {
           "list-items": ["a", "b", "c", "d", "e"],
           "records": ["123", "456", "789"]
         }
-        """).right.get.noSpaces
+        """).toOption.get.noSpaces
       body should be(expected)
     }
 
@@ -147,10 +148,7 @@ class AuditLogSpec extends AnyWordSpec with BeforeAndAfterEach with Matchers {
         .append("key-2", "bar")
         .log(unauthorizedTraceId)
       val result = Try(Await.result(f, 10.seconds)).toEither
-      result.isLeft should be(true)
-      result.left.get.getMessage should be(
-        "\"Not authorized\""
-      ) // Fails - not authorized
+      result.left.value should be("\"Not authorized\"")
     }
   }
 }
