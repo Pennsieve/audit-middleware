@@ -148,7 +148,7 @@ class AuditLogSpec extends AnyWordSpec with BeforeAndAfterEach with Matchers {
         .append("key-2", "bar")
         .log(unauthorizedTraceId)
       val result = Try(Await.result(f, 10.seconds)).toEither
-      result.left.value should be("\"Not authorized\"")
+      result.left.value.getMessage should be("\"Not authorized\"")
     }
   }
 }
