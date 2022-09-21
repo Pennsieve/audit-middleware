@@ -8,3 +8,4 @@ python2.7/.mypy_cache/
 scala/target/
 scala/project/project/
 scala/project/target/
+.bsp/

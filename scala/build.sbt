@@ -1,19 +1,18 @@
+import CrossCompilationUtil.getVersion
 lazy val scala212 = "2.12.10"
 lazy val scala213 = "2.13.8"
 lazy val supportedScalaVersions = List(scala212, scala213)
 
-
-
-
 lazy val scalatestVersion = "3.2.11"
-lazy val akkaHttpVersion = "10.1.11"
-lazy val akkaVersion = "2.6.5"
+
+lazy val akkaHttpVersion = SettingKey[String]("akkaHttpVersion")
+akkaHttpVersion := getVersion(scalaVersion.value, "10.1.11", "10.2.9")
+
+lazy val akkaVersion = SettingKey[String]("akkaVersion")
+akkaVersion := getVersion(scalaVersion.value, "2.6.5", "2.6.19")
 
 lazy val circeVersion = SettingKey[String]("circeVersion")
-circeVersion := (CrossVersion.partialVersion(scalaVersion.value) match {
-  case Some((2, 12)) => "0.11.1"
-  case _ => "0.14.1"
-})
+circeVersion := getVersion(scalaVersion.value, "0.11.1", "0.14.1")
 
 val assemblyJarPath = taskKey[Unit]("Call assembly and get the JAR file path.")
 
@@ -36,7 +35,6 @@ lazy val root = (project in file("."))
     resolvers ++= Seq(
       "Pennsieve Releases" at "https://nexus.pennsieve.cc/repository/maven-releases",
       "Pennsieve Snapshots" at "https://nexus.pennsieve.cc/repository/maven-snapshots",
-      Resolver.bintrayRepo("commercetools", "maven"),
       Resolver.sonatypeRepo("releases"),
       Resolver.sonatypeRepo("snapshots")
     ),
@@ -44,11 +42,11 @@ lazy val root = (project in file("."))
       "io.circe" %% "circe-core" % circeVersion.value,
       "io.circe" %% "circe-generic" % circeVersion.value,
       "io.circe" %% "circe-parser" % circeVersion.value,
-      "com.typesafe.akka" %% "akka-actor" % akkaVersion,
-      "com.typesafe.akka" %% "akka-stream" % akkaVersion,
-      "com.typesafe.akka" %% "akka-http" % akkaHttpVersion,
-      "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % Test,
-      "com.typesafe.akka" %% "akka-testkit" % akkaVersion % Test,
+      "com.typesafe.akka" %% "akka-actor" % akkaVersion.value,
+      "com.typesafe.akka" %% "akka-stream" % akkaVersion.value,
+      "com.typesafe.akka" %% "akka-http" % akkaHttpVersion.value,
+      "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion.value % Test,
+      "com.typesafe.akka" %% "akka-testkit" % akkaVersion.value % Test,
       "org.scalatest" %% "scalatest" % scalatestVersion % Test
     ),
     publishTo := {
@@ -69,7 +67,7 @@ lazy val root = (project in file("."))
       sys.env.getOrElse("PENNSIEVE_NEXUS_USER", "pennsieve-ci"),
       sys.env.getOrElse("PENNSIEVE_NEXUS_PW", "")
     ),
-    test in assembly := {}, // Skip running tests during JAR assembly
+    assembly / test := {}, // Skip running tests during JAR assembly
     assemblyJarPath := {
       println(assembly.value.getAbsolutePath)
     }
